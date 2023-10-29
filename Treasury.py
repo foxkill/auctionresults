@@ -18,7 +18,7 @@ class Treasury:
         self._interestRate = .0
         self.hasResults = False
 
-        # self.xmlFilenameCompetitiveResults = xmlFilenameCompetitiveResults
+        self.xmlFilenameCompetitiveResults = ""
         # self.term = term
         # self.reopening = True if reopening == "Yes" else False
         # set afterwards
@@ -130,23 +130,6 @@ class Treasury:
         self.percentageDebtPurchasedByDealers = (self.primaryDealerAccepted / self.totalAccepted) * 100
         self.hasResults = True
         return None
-        ###
-        # xml_data = self.download_auction_result()
-        # if xml_data == "":
-        #     return None
-
-        # root = ET.fromstring(xml_data)
-        # results = root.find('AuctionResults')
-        # if results == None:
-        #     return None
-
-        # total_debt = float(results.find('TotalAccepted').text) # type: ignore
-        # total_dealer_purchases = float(results.find('PrimaryDealerAccepted').text) # type: ignore
-
-        # self.percentageDebtPurchasedByDealers = (total_dealer_purchases / total_debt) * 100
-        # self.bidToCoverRatio =float(results.find('BidToCoverRatio').text)  # type: ignore
-
-        # self.hasResults = True
 
     def download_auction_result(self) -> str:
         if self.hasResults == True:

@@ -17,7 +17,7 @@ def main():
         "Security Type", 
         "Issue Date", "Maturity Date", 
         "Bid To Cover",
-        "Debt purchase by dealers",
+        "Debt purchased by dealers",
         "High Yield", "Interest Rate"]
 
     for treasury in treasuryObjects:
@@ -32,9 +32,9 @@ def main():
             treasury.issueDate, 
             treasury.maturityDate, 
             "%.2f" % treasury.getBidToCoverRatio(),
-            "%.2f" % treasury.getPercentageDebtPurchasedByDealers(),
-            "%.4f" % treasury.highYield, 
-            "%.4f" % treasury.interestRate])
+            "%.2f%%" % treasury.getPercentageDebtPurchasedByDealers(),
+            "%.3f%%" % treasury.highYield, 
+            "%.3f%%" % treasury.interestRate])
     
         # print(f"Name of the security: {name} - {cusip}")
         # print(f"Percentage of debt purchased by primary dealers: {percentage_debt_purchased_by_dealers:.2f}%")

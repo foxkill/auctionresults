@@ -21,6 +21,8 @@ class Treasuries:
             t = Treasury()
 
             t.cusip = cusip
+            t.highDiscountRate = treasury["highDiscountRate"]
+            t.highInvestmentRate = treasury["highInvestmentRate"]
             t.interestRate = treasury["interestRate"]
             t.highYield = treasury["highYield"]
             t.reopening = treasury["reopening"]

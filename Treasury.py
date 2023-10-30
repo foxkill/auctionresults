@@ -16,6 +16,8 @@ class Treasury:
         self._maturityDate = datetime.date.today()
         self._highYield = .0
         self._interestRate = .0
+        self._highDiscountRate = .0
+        self._highInvestmentRate = .0
         self.hasResults = False
 
         self.xmlFilenameCompetitiveResults = ""
@@ -27,6 +29,29 @@ class Treasury:
         # self._primaryDealerAccepted = .0
         # self._totalAccepted = .0
     
+    @property
+    def highDiscountRate(self) -> float:
+        return self._highDiscountRate
+    
+    @highDiscountRate.setter
+    def highDiscountRate(self, value: str):
+        try:
+            self._highDiscountRate = float(value)
+        except:
+            self._highDiscountRate = 0
+    
+    @property
+    def highInvestmentRate(self) -> float:
+        return self._highInvestmentRate
+
+    @highInvestmentRate.setter
+    def highInvestmentRate(self, value: str):
+        try:
+            self._highInvestmentRate = float(value)
+        except:
+            self._highInvestmentRate = 0
+
+        
     @property
     def cusip(self) -> str:
         return self._cusip
@@ -89,14 +114,20 @@ class Treasury:
 
     @highYield.setter
     def highYield(self, value: str):
-        self._highYield = float(value)
+        try:
+            self._highYield = float(value)
+        except:
+            self._highYield = .0
 
     @property
     def interestRate(self) -> float:
         return self._interestRate
 
     @interestRate.setter
-    def interestRate(self, value):
+    def interestRate(self, value: str):
+        if value == '':
+            self._interestRate = .0
+            return
         self._interestRate = float(value)
 
     @property

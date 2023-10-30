@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+source ~/code/auctionresults/venv/bin/activate
+python ar.py
+deactivate

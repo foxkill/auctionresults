@@ -1,6 +1,6 @@
 # Ignore generated files
-*.pyc
-__pycache__/
+#*.pyc
+#__pycache__/
 
 # Ignore build artifacts
 build/

@@ -2,12 +2,18 @@ import xml.etree.ElementTree as ET
 from typing import List
 from Treasuries import Treasuries
 from prettytable import PrettyTable
+from stdnum import cusip
 
 from TreasuryType import TreasuryType
 
 def main():
     cusip_number = input("Enter the CUSIP number: ")
 
+    if not cusip.is_valid(cusip_number):
+        print("Invalid cusip number given.")
+        exit (1)
+
+    cusip_number = cusip_number.strip()
     treasuryObjects = Treasuries().get(cusip_number) 
 
     if len(treasuryObjects) == 0:

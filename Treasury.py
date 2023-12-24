@@ -21,13 +21,13 @@ class Treasury:
         self.hasResults = False
 
         self.xmlFilenameCompetitiveResults = ""
+        self._primaryDealerAccepted = .0
+        self._bidToCoverRatio = .0
+        self._totalAccepted = .0
         # self.term = term
         # self.reopening = True if reopening == "Yes" else False
         # set afterwards
         # self.percentageDebtPurchasedByDealers = .0
-        # self._bidToCoverRatio = .0
-        # self._primaryDealerAccepted = .0
-        # self._totalAccepted = .0
     
     @property
     def highDiscountRate(self) -> float:
@@ -136,15 +136,21 @@ class Treasury:
 
     @bidToCoverRatio.setter
     def bidToCoverRatio(self, value: str):
-        self._bidToCoverRatio = float(value)
+        try:
+            self._bidToCoverRatio = float(value)
+        except:
+            self._bidToCoverRatio = 0
 
     @property
     def primaryDealerAccepted(self) -> float:
-        return self._primaryDealerAccepted 
+        return self._primaryDealerAccepted
 
     @primaryDealerAccepted.setter
     def primaryDealerAccepted(self, value: str):
-        self._primaryDealerAccepted = float(value)
+        try:
+            self._primaryDealerAccepted = float(value)
+        except:
+            self._primaryDealerAccepted = 0
 
     @property
     def totalAccepted(self) -> float:

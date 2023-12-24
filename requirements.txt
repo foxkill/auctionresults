@@ -2,3 +2,4 @@ requests
 prettytable
 python-stdnum
 pydantic
+typer

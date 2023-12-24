@@ -1,15 +1,31 @@
 import xml.etree.ElementTree as ET
-from typing import List
+from typing import List, Optional
+from Latest import Latest
 from Treasuries import Treasuries
 from prettytable import PrettyTable
-from stdnum import cusip
+from stdnum import cusip as cu
+import typer
+from typing_extensions import Annotated
 
 from TreasuryType import TreasuryType
 
-def main():
-    cusip_number = input("Enter the CUSIP number: ")
+app = typer.Typer(help="Auction Results v0.0.1")
 
-    if not cusip.is_valid(cusip_number):
+@app.command()
+def latest():
+    latest = Latest("") # type: ignore
+    latest.get()
+
+
+# 912828YF1
+@app.command()
+def get(cusip: Annotated[Optional[str], typer.Argument()] = None):
+    if cusip is None:
+        cusip_number = input("Enter the CUSIP number: ")
+    else:
+        cusip_number = cusip
+
+    if not cu.is_valid(cusip_number):
         print("Invalid cusip number given.")
         exit (1)
 
@@ -85,4 +101,4 @@ def main():
     print(table)
 
 if __name__ == '__main__':
-    main()
+    app()

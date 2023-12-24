@@ -7,4 +7,5 @@ class Latest:
 		pass
 	
 	def get(self):
+		print("Retrieving latest...")
 		pass

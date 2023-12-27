@@ -16,7 +16,6 @@ def latest():
     latest = Latest("") # type: ignore
     latest.get()
 
-
 # 912828YF1
 @app.command()
 def get(cusip: Annotated[Optional[str], typer.Argument()] = None):

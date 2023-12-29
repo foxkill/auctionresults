@@ -9,7 +9,10 @@ from typing_extensions import Annotated
 
 from TreasuryType import TreasuryType
 
-app = typer.Typer(help="Auction Results v0.0.1")
+app = typer.Typer(help="Auction Results")
+
+def version():
+    pass
 
 @app.command()
 def latest():
@@ -18,7 +21,8 @@ def latest():
 
 # 912828YF1
 @app.command()
-def get(cusip: Annotated[Optional[str], typer.Argument()] = None):
+def get(cusip: Annotated[Optional[str], typer.Argument()] = None, 
+        vertical: Annotated[bool, typer.Option(help='Print the output of a query (rows) vertically.')] = False):
     if cusip is None:
         cusip_number = input("Enter the CUSIP number: ")
     else:
@@ -34,6 +38,8 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None):
     if len(treasuryObjects) == 0:
         print(f"Could not retrieve auction results for: {cusip_number}")
         exit(1)
+    
+    print(vertical)
 
     table = PrettyTable()
     table.title = treasuryObjects[0].getTerm()
@@ -44,7 +50,8 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None):
         "CUSIP",
         "Reopening",
         "Security Type", 
-        "Issue Date", "Maturity Date", 
+        "Issue Date", 
+        "Maturity Date", 
         "Bid To Cover",
         "Debt purchased by dealers"]
     

@@ -3,3 +3,4 @@ prettytable
 python-stdnum
 pydantic
 typer
+pytest

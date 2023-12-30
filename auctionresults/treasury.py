@@ -5,6 +5,22 @@ import requests
 import datetime
 import xml.etree.ElementTree as ET
 
+from .treasurytype import TreasuryType
+
+__get_url__ = 'https://www.treasurydirect.gov/xml/'
+__fmt_str__ = '%s:\t%s %%s'
+
+# __header__ = "Type: %s\nCusip: %s\nReopening: %s\nType: %s\nIssue Date: %s\nMaturity Date: %s\nBid to Cover: %s\n"
+__fields__ = [
+        "Security Term", 
+        "CUSIP",
+        "Reopening",
+        "Security Type", 
+        "Issue Date", 
+        "Maturity Date", 
+        "Bid To Cover",
+        "Dealers"]
+
 class Treasury:
     def __init__(self):
         self._cusip = ""
@@ -29,6 +45,43 @@ class Treasury:
         # set afterwards
         # self.percentageDebtPurchasedByDealers = .0
     
+    def get_fields(self):
+        fields = __fields__
+
+        if type == TreasuryType.BILL.value:
+            fields.append("High Rate")
+            fields.append("Investment Rate")
+        else:
+            fields.append("High Yield")
+            fields.append("Interest Rate")
+    
+        return fields
+
+    def __str__(self):
+        yld = ''
+        rate = ''
+
+        if self.type == TreasuryType.BILL.name:
+            yld = '%.3f%%' % self.highDiscountRate
+            rate = '%.3f%%' % self.highInvestmentRate
+        else:
+            yld = '%.3f%%' % self.highYield 
+            rate = '%.3f%%' % self.interestRate
+
+        fmtstr = '\n'.join([__fmt_str__ % ((i, '\t') if i == 'CUSIP' else (i, '')) for i in self.get_fields()])
+        
+        return fmtstr % (self.securityTerm, 
+            self.cusip, 
+            'Yes' if self.reopening == True else 'No',
+            self.type,
+            self.issueDate, 
+            self.maturityDate,
+            "%.2f" % self.getBidToCoverRatio(),
+            "%.2f%%" % self.getPercentageDebtPurchasedByDealers(),
+            yld, 
+            rate
+        )
+
     @property
     def highDiscountRate(self) -> float:
         return self._highDiscountRate
@@ -90,23 +143,23 @@ class Treasury:
 
     @reopening.setter
     def reopening(self, value):
-        self._reopening = True if value == "Yes" else False
+        self._reopening = True if value == 'Yes' else False
 
     @property 
     def issueDate(self):
-        return self._issueDate.strftime("%m/%d/%Y")
+        return self._issueDate.strftime('%m/%d/%Y')
 
     @issueDate.setter
     def issueDate(self, value: str):
-        self._issueDate = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+        self._issueDate = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')
 
     @property
     def maturityDate(self) -> str:
-        return self._maturityDate.strftime("%m/%d/%Y")
+        return self._maturityDate.strftime('%m/%d/%Y')
     
     @maturityDate.setter
     def maturityDate(self, value: str):
-        self._maturityDate = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+        self._maturityDate = datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S')
     
     @property
     def highYield(self) -> float:
@@ -170,10 +223,10 @@ class Treasury:
 
     def download_auction_result(self) -> str:
         if self.hasResults == True:
-            return ""
+            return ''
 
         filename = self.xmlFilenameCompetitiveResults
-        response = requests.get(f"https://www.treasurydirect.gov/xml/{filename}")
+        response = requests.get(f'https://www.treasurydirect.gov/xml/{filename}')
         if response.status_code == 200:
             return response.content # type: ignore
         else:

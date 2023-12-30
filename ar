@@ -2,5 +2,6 @@
 
 set -e
 source ~/code/auctionresults/venv/bin/activate
-python ./arapp/ar.py -- $@
+#python ./arapp/ar.py -- $@
+python ./main.py $@
 deactivate

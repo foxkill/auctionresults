@@ -4,7 +4,7 @@
 import requests
 import json
 from typing import List
-from Treasury import Treasury
+from auctionresults.treasury import Treasury
 
 class Treasuries:
     def __init__(self):

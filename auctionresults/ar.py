@@ -1,26 +1,15 @@
 import xml.etree.ElementTree as ET
 from typing import List, Optional
 from Latest import Latest
-from Treasuries import Treasuries
+from auctionresults.treasuries import Treasuries
 from prettytable import PrettyTable
 from stdnum import cusip as cu
 import typer
 from typing_extensions import Annotated
 
-from TreasuryType import TreasuryType
-
-app = typer.Typer(help="Auction Results")
-
-def version():
-    pass
-
-@app.command()
-def latest():
-    latest = Latest("") # type: ignore
-    latest.get()
+from auctionresults.treasurytype import TreasuryType
 
 # 912828YF1
-@app.command()
 def get(cusip: Annotated[Optional[str], typer.Argument()] = None, 
         vertical: Annotated[bool, typer.Option(help='Print the output of a query (rows) vertically.')] = False):
     if cusip is None:
@@ -39,8 +28,6 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None,
         print(f"Could not retrieve auction results for: {cusip_number}")
         exit(1)
     
-    print(vertical)
-
     table = PrettyTable()
     table.title = treasuryObjects[0].getTerm()
     type = treasuryObjects[0].type
@@ -105,6 +92,3 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None,
         # print("")
 
     print(table)
-
-if __name__ == '__main__':
-    app()

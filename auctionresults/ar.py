@@ -1,13 +1,13 @@
 import xml.etree.ElementTree as ET
 from typing import List, Optional
-from Latest import Latest
+from auctionresults.latest import Latest
 from auctionresults.treasuries import Treasuries
 from prettytable import PrettyTable
 from stdnum import cusip as cu
 import typer
 from typing_extensions import Annotated
 
-from auctionresults.treasurytype import TreasuryType
+from auctionresults.treasury_type import TreasuryType
 
 # 912828YF1
 def get(cusip: Annotated[Optional[str], typer.Argument()] = None, 

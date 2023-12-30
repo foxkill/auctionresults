@@ -5,7 +5,7 @@ import requests
 import datetime
 import xml.etree.ElementTree as ET
 
-from .treasurytype import TreasuryType
+from .treasury_type import TreasuryType
 
 __get_url__ = 'https://www.treasurydirect.gov/xml/'
 __fmt_str__ = '%s:\t%s %%s'

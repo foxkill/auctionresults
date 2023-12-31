@@ -20,6 +20,15 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["get", "912828YF1"]
+        },
+        {
+            "name": "Treasury [lastest]",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["latest"]
         }
     ]
 }

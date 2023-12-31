@@ -7,7 +7,7 @@ from typing import Optional
 from typing_extensions import Annotated
 
 from prettytable import PrettyTable
-from auctionresults import __app_name__, __version__, Treasuries, Treasury, TreasuryType
+from auctionresults import __app_name__, __version__, Treasuries, Treasury, TreasuryType, Latest
 import typer
 
 __vertical__ = False
@@ -29,8 +29,10 @@ def vertical(value: bool):
 
 @app.command()
 def latest():
-    latest = Latest("") # type: ignore
-    latest.get()
+    latest = Latest()
+    treasuries = latest.get()
+    for treasury in treasuries:
+        print(treasury.cusip)
 
 # vertical: Annotated[bool, typer.Option(help='Print the output of a query (rows) vertically.')] = False):
 # 912828YF1
@@ -60,24 +62,6 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None):
     table = PrettyTable()
     table.title = treasuryObjects[0].getTerm()
     fields = treasuryObjects[0].get_fields()
-
-    # type = treasuryObjects[0].type
-    # fields = [
-    #     "Security Term", 
-    #     "CUSIP",
-    #     "Reopening",
-    #     "Security Type", 
-    #     "Issue Date", 
-    #     "Maturity Date", 
-    #     "Bid To Cover",
-    #     "Debt purchased by dealers"]
-    
-    # if type == TreasuryType.BILL.value:
-    #     fields.append("High Rate")
-    #     fields.append("Investment Rate")
-    # else:
-    #     fields.append("High Yield")
-    #     fields.append("Interest Rate")
 
     table.field_names = fields
 

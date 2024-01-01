@@ -8,5 +8,7 @@ class TreasuryType(Enum):
     BILL = "Bill"
     NOTE = "Note"
     BOND = "Bond"
+    FRN  = "FRN"
+    CMB  = "CMB"
 
     

@@ -9,9 +9,12 @@ from .treasuries_pd import TreasuryPD
 from .treasuries_pd import TreasuriesPD
 
 __url__ = 'https://www.treasurydirect.gov/TA_WS/securities/auctioned'
+
 class Latest:
 	"""docstring for Latest."""
-	def __init__(self):
+	def __init__(self, type: str, days: int = 7):
+		self.type = type if type != "" else ""
+		self.days = 7 if days == 0 else days
 		self.treasuries = []
 
 	def get(self) -> List[TreasuryPD]:
@@ -26,7 +29,11 @@ class Latest:
 
 	def load(self):
 		url = __url__
-		url += '?days=14'
+
+		if self.type != '':
+			url += ('?type=' + self.type.lower().title() + '&days=' + str(self.days))
+		else:
+			url += ('?days=' + str(self.days))
 
 		response = requests.get(url)
 

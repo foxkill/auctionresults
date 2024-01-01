@@ -11,7 +11,6 @@ from auctionresults import __app_name__, __version__, Treasuries, Treasury, Trea
 import typer
 
 __vertical__ = False
-# Reopening: %s\nType: %s\nIssue Date: %s\nMaturity Date: %s\nBid to Cover: %s\nPercentage bought by dealers: %s\n Interest Rate: %s\n" 
 
 app = typer.Typer(help=__app_name__)
 
@@ -28,11 +27,21 @@ def vertical(value: bool):
         __vertical__ = False
 
 @app.command()
-def latest():
-    latest = Latest()
+def latest(
+    type: Annotated[Optional[str], typer.Option(help='Type of the treasury to quey (Bill, Note, Bond, FRN, CMB)')] = '',
+    days: Annotated[Optional[int], typer.Option(help='The number of days to look back - default is 7')] = 0
+):
+    if type is None:
+        type = ''
+    
+    if days is None:
+        days = 0
+
+    latest = Latest(type, days)
     treasuries = latest.get()
     for treasury in treasuries:
-        print(treasury.cusip)
+        print(treasury)
+        print('')
 
 # vertical: Annotated[bool, typer.Option(help='Print the output of a query (rows) vertically.')] = False):
 # 912828YF1
@@ -78,9 +87,6 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None):
         table.align["Interest Rate"] = "r"
 
     for treasury in treasuryObjects:
-        # bid_to_cover_ratio = treasury.getBidToCoverRatio()
-        # percentage_debt_purchased_by_dealers = treasury.getPercentageDebtPurchasedByDealers()
-
         if type == TreasuryType.BILL.value:
             yld = "%.3f%%" % treasury.highDiscountRate
             rate = "%.3f%%" % treasury.highInvestmentRate

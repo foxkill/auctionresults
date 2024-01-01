@@ -2,8 +2,8 @@
 # Treasury Object
 #
 import requests
+from copy import copy
 import datetime
-import xml.etree.ElementTree as ET
 
 from .treasury_type import TreasuryType
 
@@ -19,7 +19,8 @@ __fields__ = [
         "Issue Date", 
         "Maturity Date", 
         "Bid To Cover",
-        "Dealers"]
+        "Dealers"
+]
 
 class Treasury:
     def __init__(self):
@@ -46,7 +47,7 @@ class Treasury:
         # self.percentageDebtPurchasedByDealers = .0
     
     def get_fields(self):
-        fields = __fields__
+        fields = copy(__fields__) 
 
         if type == TreasuryType.BILL.value:
             fields.append("High Rate")

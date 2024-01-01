@@ -67,6 +67,8 @@ class TreasuryPD(BaseModel):
     securityTerm: str
     issueDate: datetime
     maturityDate: datetime
+    term: str
+    type: str
 
     def get_fields(self):
         fields = copy(__fields__)
@@ -112,6 +114,10 @@ class TreasuryPD(BaseModel):
     @property
     def maturityDateAsStr(self) -> str:
         return self.maturityDate.strftime('%m/%d/%Y')
+
+    @property
+    def termAsStr(self) -> str:
+        return self.term + ' ' + self.type
 
     def getBidToCoverRatio(self):
         return 0.0

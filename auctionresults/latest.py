@@ -5,8 +5,7 @@ import json
 import requests
 from typing import List
 
-from .treasuries_pd import TreasuryPD
-from .treasuries_pd import TreasuriesPD
+from .treasuries_pd import TreasuryPD, TreasuriesPD
 
 __url__ = 'https://www.treasurydirect.gov/TA_WS/securities/auctioned'
 

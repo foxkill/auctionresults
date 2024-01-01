@@ -13,10 +13,10 @@
             "justMyCode": true
         },
         {
-            "name": "Treasuries: with argument",
+            "name": "Treasury: [get]",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["get", "912828YF1"]

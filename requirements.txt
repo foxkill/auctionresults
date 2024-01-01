@@ -4,3 +4,4 @@ python-stdnum
 pydantic
 typer
 pytest
+requests-mock

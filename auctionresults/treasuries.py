@@ -29,7 +29,7 @@ class Treasuries:
 
         data = json.loads(response)
 
-        self.treasuries = self.treasuries.model_construct(data)
+        self.treasuries = TreasuriesPD(root=data)
 
         return self.treasuries
 

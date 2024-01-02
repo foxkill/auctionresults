@@ -7,7 +7,7 @@ from typing import Optional
 from typing_extensions import Annotated
 
 from prettytable import PrettyTable
-from auctionresults import __app_name__, __version__, Treasuries, TreasuryType, Latest, TreasuriesPD
+from auctionresults import __app_name__, __version__, Treasuries, TreasuryType, Latest, TreasuriesPD, TreasuryPD
 import typer
 
 __vertical__ = False
@@ -28,26 +28,28 @@ def vertical(value: bool):
 
 def treasuries_print(treasuryObjects: TreasuriesPD):
     table = PrettyTable()
-    peekObject = treasuryObjects.root[0]
-
-    table.title = peekObject.termAsStr
-    fields = peekObject.get_fields()
-
-    table.field_names = fields
-
-    table.align["Security Term"] = "l"
-    table.align["Security Type"] = "l"
-    table.align["Bid To Cover"] = "r"
-    table.align["Debt purchased by dealers"] = "r"
-
-    if type == TreasuryType.BILL.value:
-        table.align["High Rate"] = "r"
-        table.align["Investment Rate"] = "r"
-    else:
-        table.align["High Yield"] = "r"
-        table.align["Interest Rate"] = "r"
-
+    firstLoop = True
+    type = ''
     for treasury in treasuryObjects.root:
+        if firstLoop:
+            type = treasury.type
+            table.title = treasury.term_as_str
+            table.field_names = treasury.get_fields()
+
+            table.align["Security Term"] = "l"
+            table.align["Security Type"] = "l"
+            table.align["Bid To Cover"] = "r"
+            table.align["Debt purchased by dealers"] = "r"
+
+            if type == TreasuryType.BILL.value:
+                table.align["High Rate"] = "r"
+                table.align["Investment Rate"] = "r"
+            else:
+                table.align["High Yield"] = "r"
+                table.align["Interest Rate"] = "r"
+
+            firstLoop = True
+
         if type == TreasuryType.BILL.value:
             yld = "%.3f%%" % treasury.highDiscountRate
             rate = "%.3f%%" % treasury.highInvestmentRate

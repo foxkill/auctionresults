@@ -7,7 +7,7 @@ from typing import List
 
 from .treasuries_pd import TreasuryPD, TreasuriesPD
 
-__url__ = 'https://www.treasurydirect.gov/TA_WS/securities/auctioned'
+__auctioned_url__ = 'https://www.treasurydirect.gov/TA_WS/securities/auctioned'
 
 class Latest:
 	"""docstring for Latest."""
@@ -27,7 +27,7 @@ class Latest:
 		return t.root
 
 	def load(self):
-		url = __url__
+		url = __auctioned_url__
 
 		if self.type != '':
 			url += ('?type=' + self.type.lower().title() + '&days=' + str(self.days))

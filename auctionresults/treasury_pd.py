@@ -75,12 +75,10 @@ class TreasuryPD(BaseModel):
     def term_as_str(self) -> str:
         return self.term + ' ' + self.type
 
-    @computed_field
     @property
     def issueDateAsStr(self) -> str:
         return self.issueDate.strftime('%m/%d/%Y')
 
-    @computed_field
     @property
     def maturityDateAsStr(self) -> str:
         return self.maturityDate.strftime('%m/%d/%Y')

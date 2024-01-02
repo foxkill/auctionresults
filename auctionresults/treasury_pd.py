@@ -5,7 +5,7 @@ from copy import copy
 from datetime import date, datetime
 from typing import Optional
 from typing_extensions import Annotated
-from pydantic import BaseModel, BeforeValidator
+from pydantic import BaseModel, BeforeValidator, computed_field
 from .treasury_type import TreasuryType
 
 __fmt_str__ = '%s:\t%s %%s'
@@ -70,6 +70,21 @@ class TreasuryPD(BaseModel):
     term: str
     type: str
 
+    @computed_field(repr=False, return_type=str)
+    @property
+    def term_as_str(self) -> str:
+        return self.term + ' ' + self.type
+
+    @computed_field
+    @property
+    def issueDateAsStr(self) -> str:
+        return self.issueDate.strftime('%m/%d/%Y')
+
+    @computed_field
+    @property
+    def maturityDateAsStr(self) -> str:
+        return self.maturityDate.strftime('%m/%d/%Y')
+
     def get_fields(self):
         fields = copy(__fields__)
 
@@ -106,18 +121,6 @@ class TreasuryPD(BaseModel):
             yld, 
             rate
         )
-
-    @property
-    def issueDateAsStr(self) -> str:
-        return self.issueDate.strftime('%m/%d/%Y')
-
-    @property
-    def maturityDateAsStr(self) -> str:
-        return self.maturityDate.strftime('%m/%d/%Y')
-
-    @property
-    def termAsStr(self) -> str:
-        return self.term + ' ' + self.type
 
     def getBidToCoverRatio(self):
         return 0.0

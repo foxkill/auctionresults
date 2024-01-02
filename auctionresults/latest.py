@@ -5,7 +5,8 @@ import json
 import requests
 from typing import List
 
-from .treasuries_pd import TreasuryPD, TreasuriesPD
+from .treasury_type import TreasuryType
+from .treasuries_pd import TreasuriesPD
 
 __auctioned_url__ = 'https://www.treasurydirect.gov/TA_WS/securities/auctioned'
 
@@ -13,27 +14,54 @@ class Latest:
 	"""docstring for Latest."""
 	def __init__(self, type: str, days: int = 7):
 		self.type = type if type != "" else ""
-		self.days = 7 if days == 0 else days
+
+		if self.type != "":
+			if self.is_valid_type(self.type) == False:
+				raise ValueError(f'Invalid treasury type {self.type} given')
+
+		self.days = 7 if days <= 0 else days
 		self.treasuries = []
 
-	def get(self) -> List[TreasuryPD]:
+	def get(self) -> TreasuriesPD:
 		self.treasuries = []
+
 		response = self.load()
 		if response == '':
-			return []
+			return TreasuriesPD(root=[])
 		
 		data = json.loads(response)
-		t = TreasuriesPD(root=data)
-		return t.root
 
-	def load(self):
+		return TreasuriesPD(root=data)
+
+	def url(self) -> str:
 		url = __auctioned_url__
 
 		if self.type != '':
-			url += ('?type=' + self.type.lower().title() + '&days=' + str(self.days))
+			url += ('?type=' + self.get_type(self.type) + '&days=' + str(self.days))
 		else:
 			url += ('?days=' + str(self.days))
 
-		response = requests.get(url)
+		return url
 
+	def get_type(self, value: str) -> str:
+		check = value.lower().title()
+
+		if check in ['Frn', 'Cmb']:
+			return check.upper()
+
+		return check
+
+	def get_days(self) -> int:
+		return self.days
+
+	def is_valid_type(self, type: str) -> bool:
+		mytype = self.get_type(type)
+		try:
+			TreasuryType(mytype)
+			return True
+		except Exception as e:
+			return False
+	
+	def load(self):
+		response = requests.get(self.url())
 		return response.content if response.status_code == 200 else ""

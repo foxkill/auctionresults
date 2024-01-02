@@ -6,7 +6,7 @@ import requests_mock
 from typer.testing import CliRunner
 import cli
 from auctionresults import __app_name__, __version__
-from auctionresults.latest import __url__
+from auctionresults.latest import __auctioned_url__
 from auctionresults.treasuries import __treasuries_url__
 from .latest_fixture import latest_json
 from .get_fixture import get_json
@@ -25,7 +25,7 @@ def test_help():
 
 def test_lastest(latest_json):
     with requests_mock.Mocker() as mock:
-        mock.get(__url__, json=latest_json)
+        mock.get(__auctioned_url__, json=latest_json)
         result = runner.invoke(cli.app, ['latest', '--type', 'bond', '--days', '60'])
         assert result.exit_code == 0
 

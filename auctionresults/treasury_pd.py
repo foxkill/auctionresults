@@ -69,6 +69,7 @@ class TreasuryPD(BaseModel):
     maturityDate: datetime
     term: str
     type: str
+    bidToCoverRatio: StrFloat
 
     @computed_field(repr=False, return_type=str)
     @property

@@ -27,10 +27,13 @@ def test_lastest(latest_json):
     with requests_mock.Mocker() as mock:
         mock.get(__auctioned_url__, json=latest_json)
         result = runner.invoke(cli.app, ['latest', '--type', 'bond', '--days', '60'])
+
         assert result.exit_code == 0
+        assert 'Last auctioned treasuries' in result.stdout
 
 def test_get(get_json):
     with requests_mock.Mocker() as mock:
         mock.get(__treasuries_url__, json=get_json)
         result = runner.invoke(cli.app, ['get', '912828YF1'])
         assert result.exit_code == 0
+        assert '912828YF1' in result.stdout

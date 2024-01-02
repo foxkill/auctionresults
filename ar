@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-source ~/code/auctionresults/venv/bin/activate
+source ~/code/auctionresults/.venv/bin/activate
 #python ./arapp/ar.py -- $@
 python ./main.py $@
 deactivate

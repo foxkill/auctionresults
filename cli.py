@@ -26,14 +26,19 @@ def vertical(value: bool):
     else:
         __vertical__ = False
 
-def treasuries_print(treasuryObjects: TreasuriesPD):
+def treasuries_print_table(treasuryObjects: TreasuriesPD, header: str = ''):
     table = PrettyTable()
     firstLoop = True
     type = ''
     for treasury in treasuryObjects.root:
+        type = treasury.type
+
         if firstLoop:
-            type = treasury.type
-            table.title = treasury.term_as_str
+            if header == '':
+                table.title = treasury.term_as_str
+            else:
+                table.title = header 
+
             table.field_names = treasury.get_fields()
 
             table.align["Security Term"] = "l"
@@ -48,12 +53,16 @@ def treasuries_print(treasuryObjects: TreasuriesPD):
                 table.align["High Yield"] = "r"
                 table.align["Interest Rate"] = "r"
 
-            firstLoop = True
+            firstLoop = False
 
         if type == TreasuryType.BILL.value:
+            table.align["High Rate"] = "r"
+            table.align["Investment Rate"] = "r"
             yld = "%.3f%%" % treasury.highDiscountRate
             rate = "%.3f%%" % treasury.highInvestmentRate
         else:
+            table.align["High Yield"] = "r"
+            table.align["Interest Rate"] = "r"
             yld = "%.3f%%" % treasury.highYield 
             rate = "%.3f%%" % treasury.interestRate
 
@@ -62,14 +71,16 @@ def treasuries_print(treasuryObjects: TreasuriesPD):
             treasury.cusip, 
             "Yes" if treasury.reopening == True else "No",
             treasury.type,
-            treasury.issueDate, 
-            treasury.maturityDate, 
-            "%.2f" % treasury.getBidToCoverRatio(),
+            treasury.issueDateAsStr, 
+            treasury.maturityDateAsStr, 
+            "%.2f" % treasury.bidToCoverRatio,
             "%.2f%%" % treasury.getPercentageDebtPurchasedByDealers(),
             yld, 
-            rate])
+            rate
+            ]
+        )
  
-        typer.echo(table)
+    typer.echo(table)
 
 @app.command()
 def latest(
@@ -84,11 +95,14 @@ def latest(
 
     latest = Latest(type, days)
     treasuries = latest.get()
-    for treasury in treasuries:
-        print(treasury)
-        print('')
 
-# vertical: Annotated[bool, typer.Option(help='Print the output of a query (rows) vertically.')] = False):
+    if __vertical__ == True:
+        for treasury in treasuries.root:
+            print(treasury)
+            print('')
+    else:
+        treasuries_print_table(treasuries, 'Last auctioned treasuries')
+
 # 912828YF1
 @app.command()
 def get(cusip: Annotated[Optional[str], typer.Argument()] = None):
@@ -98,8 +112,8 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None):
         cusip_number = cusip
 
     if not cu.is_valid(cusip_number):
-        print("Invalid cusip number given.")
-        exit (1)
+        typer.echo("Invalid cusip number given.")
+        typer.Exit(1)
 
     cusip_number = cusip_number.strip()
     treasuryObjects = Treasuries().get(cusip_number) 
@@ -112,7 +126,7 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None):
         for treasury in treasuryObjects.root:
             typer.echo(treasury)
     else:
-        treasuries_print(treasuryObjects)
+        treasuries_print_table(treasuryObjects)
 
 @app.callback()
 def main(

@@ -30,6 +30,11 @@ def treasuries_print_table(treasuryObjects: TreasuriesPD, header: str = ''):
     table = PrettyTable()
     firstLoop = True
     type = ''
+
+    if len(treasuryObjects.root) == 0:
+        print('No treasuries matching the criteria found.')
+        return
+
     for treasury in treasuryObjects.root:
         type = treasury.type
 
@@ -66,17 +71,18 @@ def treasuries_print_table(treasuryObjects: TreasuriesPD, header: str = ''):
             yld = "%.3f%%" % treasury.highYield 
             rate = "%.3f%%" % treasury.interestRate
 
-        table.add_row([
-            treasury.securityTerm, 
-            treasury.cusip, 
-            "Yes" if treasury.reopening == True else "No",
-            treasury.type,
-            treasury.issueDateAsStr, 
-            treasury.maturityDateAsStr, 
-            "%.2f" % treasury.bidToCoverRatio,
-            "%.2f%%" % treasury.getPercentageDebtPurchasedByDealers(),
-            yld, 
-            rate
+        table.add_row(
+            [
+                treasury.securityTerm, 
+                treasury.cusip, 
+                "Yes" if treasury.reopening == True else "No",
+                treasury.type,
+                treasury.issueDateAsStr, 
+                treasury.maturityDateAsStr, 
+                "%.2f" % treasury.bidToCoverRatio,
+                "%.2f%%" % treasury.getPercentageDebtPurchasedByDealers(),
+                yld, 
+                rate
             ]
         )
  

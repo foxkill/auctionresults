@@ -1,13 +1,15 @@
 import xml.etree.ElementTree as ET
 from typing import List, Optional
-from auctionresults.latest import Latest
-from auctionresults.treasuries import Treasuries
+
+import typer
 from prettytable import PrettyTable
 from stdnum import cusip as cu
-import typer
 from typing_extensions import Annotated
 
+from auctionresults.latest import Latest
+from auctionresults.treasuries import Treasuries
 from auctionresults.treasury_type import TreasuryType
+
 
 # 912828YF1
 def get(cusip: Annotated[Optional[str], typer.Argument()] = None, 
@@ -24,13 +26,13 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None,
     cusip_number = cusip_number.strip()
     treasuryObjects = Treasuries().get(cusip_number) 
 
-    if len(treasuryObjects) == 0:
+    if len(treasuryObjects.root) == 0:
         print(f"Could not retrieve auction results for: {cusip_number}")
         exit(1)
     
     table = PrettyTable()
-    table.title = treasuryObjects[0].getTerm()
-    type = treasuryObjects[0].type
+    table.title = treasuryObjects.root[0].term_as_str
+    type = treasuryObjects.root[0].type
 
     fields = [
         "Security Term", 
@@ -63,7 +65,7 @@ def get(cusip: Annotated[Optional[str], typer.Argument()] = None,
         table.align["High Yield"] = "r"
         table.align["Interest Rate"] = "r"
 
-    for treasury in treasuryObjects:
+    for treasury in treasuryObjects.root:
         # bid_to_cover_ratio = treasury.getBidToCoverRatio()
         # percentage_debt_purchased_by_dealers = treasury.getPercentageDebtPurchasedByDealers()
 

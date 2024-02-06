@@ -1,8 +1,8 @@
 import pytest
 import requests_mock
 
-from auctionresults.treasury_type import TreasuryType
 from auctionresults.latest import Latest, __auctioned_url__
+from auctionresults.treasury_type import TreasuryType
 from tests.latest_fixture import latest_json
 
 __bond_url__ = 'https://www.treasurydirect.gov/TA_WS/securities/auctioned?type=Bond&days=10'
@@ -14,7 +14,7 @@ def test_latest_get(latest_json):
         mock.get(__auctioned_url__, json=latest_json)
         newest = latest.get()
 
-        # 11 tresuries
+        # 11 treasuries
         assert len(newest.root) == 11
 
         bills = filter(lambda x: (x.type == TreasuryType.BILL.value), newest.root)

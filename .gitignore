@@ -16,3 +16,4 @@ venv/
 .vscode
 
 # Ignore json files
+*.json

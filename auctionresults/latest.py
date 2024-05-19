@@ -2,16 +2,19 @@
 # Retrieves the latest auctions.
 #
 import json
-import requests
 from typing import List
 
-from .treasury_type import TreasuryType
+import requests
+
+from auctionresults.load import Load
+
 from .treasuries_pd import TreasuriesPD
+from .treasury_type import TreasuryType
 
 __auctioned_url__ = 'https://www.treasurydirect.gov/TA_WS/securities/auctioned'
 
 class Latest:
-	"""docstring for Latest."""
+	"""Return the latest auctions for a given treasury type."""
 	def __init__(self, type: str, days: int = 7):
 		self.type = type if type != "" else ""
 
@@ -20,12 +23,11 @@ class Latest:
 				raise ValueError(f'Invalid treasury type {self.type} given')
 
 		self.days = 7 if days <= 0 else days
-		self.treasuries = []
 
 	def get(self) -> TreasuriesPD:
 		self.treasuries = []
 
-		response = self.load()
+		response = Load().get(self.url())
 		if response == '':
 			return TreasuriesPD(root=[])
 		
@@ -62,6 +64,4 @@ class Latest:
 		except Exception as e:
 			return False
 	
-	def load(self):
-		response = requests.get(self.url())
-		return response.content if response.status_code == 200 else ""
+	
